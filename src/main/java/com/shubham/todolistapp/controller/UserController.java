@@ -1,9 +1,10 @@
 package com.shubham.todolistapp.controller;
 
+import com.shubham.todolistapp.data.TodoUser;
 import com.shubham.todolistapp.entity.JwtRequest;
 import com.shubham.todolistapp.entity.JwtResponse;
 import com.shubham.todolistapp.entity.UserDto;
-import com.shubham.todolistapp.services.MyUserDetailsService;
+import com.shubham.todolistapp.services.implementation.UserDetailsServiceImpl;
 import com.shubham.todolistapp.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +15,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class JwtController {
+@RequestMapping(name = "/user")
+public class UserController {
 
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -50,17 +52,18 @@ public class JwtController {
             throw new Exception("Incorrect Username & password", e);
         }
 
+
         //loading username in user details
-        final UserDetails userdetails = userDetailsService
+        final TodoUser todoUser = userDetailsService
                 .loadUserByUsername(jwtRequest.getUsername());
 
         //generating jwt response token
-        final String jwt = jwtUtil.generateToken(userdetails);
+        final String jwt = jwtUtil.generateToken(todoUser);
 
         //returning JwtResponse token
         return ResponseEntity.ok(new JwtResponse(jwt));
-
     }
+
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> saveUser(@RequestBody UserDto user) throws Exception {

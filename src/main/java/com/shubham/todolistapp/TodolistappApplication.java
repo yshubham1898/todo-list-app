@@ -14,3 +14,13 @@ public class TodolistappApplication {
 	}
 
 }
+
+
+			// Flow of project
+
+//1. 	Request comes
+//2.	Extract username from Jwt token
+//3.	use loadbyusername to get user object
+//4.	this user object is used to pass with todoinput
+//5.	using Auth we extract userId from principal
+

@@ -1,5 +1,6 @@
 package com.shubham.todolistapp.util;
 
+import com.shubham.todolistapp.data.TodoUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -47,9 +48,9 @@ public class JwtUtil {
 
 
     //this method will generate the token, using create method
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(TodoUser todoUser){
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, todoUser.getUsername());
     }
 
 
@@ -63,9 +64,10 @@ public class JwtUtil {
 
 
     //validate token
-    public Boolean validateToken(String token, UserDetails userDetails){
+    public Boolean validateToken(String token, TodoUser todoUser){
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(todoUser.getUsername()) && !isTokenExpired(token));
     }
+
 
 }

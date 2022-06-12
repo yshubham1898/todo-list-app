@@ -1,9 +1,8 @@
 package com.shubham.todolistapp.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -12,34 +11,35 @@ public class Todo {
 
 
     @Id
-    @Column(name = "id")
-    private int todoId;
+    @Column(name = "todo_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long todoId;
 
     private String title;
 
     private String content;
 
-    private Boolean status;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private DaoUser daoUser;
 
-    private Date date;
-
-    public Todo(int todoId, String title, String content, Boolean status, Date date) {
+    public Todo(long todoId, String title, String content, DaoUser daoUser) {
         this.todoId = todoId;
         this.title = title;
         this.content = content;
-        this.status = status;
-        this.date = date;
+        this.daoUser = daoUser;
     }
 
     public Todo() {
 
     }
 
-    public int getTodoId() {
+    public long getTodoId() {
         return todoId;
     }
 
-    public void setTodoId(int todoId) {
+    public void setTodoId(long todoId) {
         this.todoId = todoId;
     }
 
@@ -59,30 +59,13 @@ public class Todo {
         this.content = content;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public DaoUser getDaoUser() {
+        return daoUser;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setDaoUser(DaoUser daoUser) {
+        this.daoUser = daoUser;
     }
 
-    public Date getDate() {
-        return date;
-    }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    @Override
-    public String toString() {
-        return "Todo{" +
-                "todoId=" + todoId +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", status=" + status +
-                ", date=" + date +
-                '}';
-    }
 }
