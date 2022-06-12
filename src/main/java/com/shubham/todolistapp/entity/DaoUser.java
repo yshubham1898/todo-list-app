@@ -19,13 +19,13 @@ public class DaoUser {
     private String password;
 
     @OneToMany(mappedBy = "daoUser", fetch = FetchType.LAZY)
-    private List<Todo> todo;
+    private List<Todo> todos;
 
-    public DaoUser(long id, String username, String password, List<Todo> todo) {
+    public DaoUser(long id, String username, String password, List<Todo> todos) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.todo = todo;
+        this.todos = todos;
     }
 
     public DaoUser() {
@@ -56,11 +56,11 @@ public class DaoUser {
         this.password = password;
     }
 
-    public List<Todo> getTodo() {
-        return todo;
+    public List<Todo> getTodos() {
+        return todos;
     }
 
     public void setTodo(List<Todo> todo) {
-        this.todo = todo;
+        this.todos = todos;
     }
 }

@@ -55,7 +55,7 @@ public class TodoServicesImpl implements TodoServices {
         List<Todo> todos = null;
         Optional<DaoUser> user = userRepository.findById(userId);
         if(user.isPresent()){
-            todos = user.get().getTodo();
+            todos = user.get().getTodos();
         }
         return todos;
     }
