@@ -1,24 +1,31 @@
 package com.shubham.todolistapp.services.interfaces;
 
 import com.shubham.todolistapp.entity.Todo;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 
 public interface TodoServices {
 
+    //addApi
     public Todo addTodo(Todo todo, long userId);
 
-    //addTodo with user object
+
+    //get single todoApi
+    public Optional<Todo> getTodo(long todoId);
 
 
-    Optional<Todo> getTodo(long todoId, long userId);
+    //pagination getAll Api
+    public Page<Todo> getAllTodo(int offset, int pageSize);
 
-    public List<Todo> getAllTodos(long userId);
+
+    //updateApi --> pending
+    public Todo updateTodo(Todo todo, long todoId);
 
 
+    //deleteApi
     public void deleteTodo(long todoId);
-
 
 }

@@ -46,7 +46,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             //the actual token starts from 7th index position after Bearer
             jwt = header.substring(7);
             username = jwtUtil.extractUsername(jwt);
-
         }
 
 

@@ -52,7 +52,6 @@ public class UserController {
             throw new Exception("Incorrect Username & password", e);
         }
 
-
         //loading username in user details
         final TodoUser todoUser = userDetailsService
                 .loadUserByUsername(jwtRequest.getUsername());
@@ -63,6 +62,7 @@ public class UserController {
         //returning JwtResponse token
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
+
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

@@ -30,20 +30,19 @@ public class UserDetailsServiceImpl implements UserInfo {
 
     @Override
     public TodoUser loadUserByUsername(String username) throws UsernameNotFoundException {
-
         DaoUser user = userRepository.findByUsername(username);
-
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
         return new TodoUser(user.getId(), user.getUsername(), user.getPassword());
-
     }
 
 
     public DaoUser save(UserDto user) {
         DaoUser newUser = new DaoUser();
         newUser.setUsername(user.getUsername());
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userRepository.save(newUser);
     }
@@ -52,5 +51,6 @@ public class UserDetailsServiceImpl implements UserInfo {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth != null ? (TodoUser)auth.getPrincipal() : null;
     }
+
 
 }

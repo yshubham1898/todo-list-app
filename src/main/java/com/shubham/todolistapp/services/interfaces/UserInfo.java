@@ -11,4 +11,5 @@ public interface UserInfo extends UserDetailsService {
 
     TodoUser getAuthUser();
 
+
 }
