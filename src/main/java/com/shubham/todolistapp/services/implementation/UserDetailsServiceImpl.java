@@ -2,24 +2,18 @@ package com.shubham.todolistapp.services.implementation;
 
 import com.shubham.todolistapp.data.TodoUser;
 import com.shubham.todolistapp.entity.DaoUser;
-import com.shubham.todolistapp.entity.UserDto;
+import com.shubham.todolistapp.data.UserDto;
 import com.shubham.todolistapp.repository.UserRepository;
-import com.shubham.todolistapp.services.interfaces.UserInfo;
+import com.shubham.todolistapp.services.interfaces.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 @Service
-public class UserDetailsServiceImpl implements UserInfo {
+public class UserDetailsServiceImpl implements UserDetails {
 
 
     @Autowired
@@ -28,8 +22,11 @@ public class UserDetailsServiceImpl implements UserInfo {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
+    //the method can be implemented to feed customer information to the spring security API
     @Override
     public TodoUser loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        //getting user from username
         DaoUser user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
@@ -47,6 +44,7 @@ public class UserDetailsServiceImpl implements UserInfo {
         return userRepository.save(newUser);
     }
 
+    //to get principal from which we can extract a userId which is a foreign key
     public TodoUser getAuthUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth != null ? (TodoUser)auth.getPrincipal() : null;

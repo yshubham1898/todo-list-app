@@ -47,6 +47,9 @@ public class JwtUtil {
     }
 
 
+    //the whole generation of token starts from here
+
+
     //this method will generate the token, using create method
     public String generateToken(TodoUser todoUser){
         Map<String, Object> claims = new HashMap<>();

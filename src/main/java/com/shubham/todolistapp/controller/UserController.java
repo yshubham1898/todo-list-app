@@ -3,7 +3,7 @@ package com.shubham.todolistapp.controller;
 import com.shubham.todolistapp.data.TodoUser;
 import com.shubham.todolistapp.entity.JwtRequest;
 import com.shubham.todolistapp.entity.JwtResponse;
-import com.shubham.todolistapp.entity.UserDto;
+import com.shubham.todolistapp.data.UserDto;
 import com.shubham.todolistapp.services.implementation.UserDetailsServiceImpl;
 import com.shubham.todolistapp.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(name = "/user")
+@RequestMapping(value = "/user")
 public class UserController {
 
 

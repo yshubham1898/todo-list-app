@@ -4,16 +4,18 @@ import com.shubham.todolistapp.data.ResponseDto;
 import com.shubham.todolistapp.entity.Todo;
 import com.shubham.todolistapp.repository.TodoRepository;
 import com.shubham.todolistapp.services.interfaces.TodoServices;
-import com.shubham.todolistapp.services.interfaces.UserInfo;
+import com.shubham.todolistapp.services.interfaces.UserDetails;
 import com.shubham.todolistapp.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/todo")
+
 public class TodoController {
 
     @Autowired
@@ -26,25 +28,22 @@ public class TodoController {
     ResponseUtil responseUtil;
 
     @Autowired
-    UserInfo userInfo;
+    UserDetails userDetails;
+
 
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseDto addTodo(@RequestBody Todo todo) {
-        long userId = userInfo.getAuthUser().getUserId();
-//        return this.todoServices.addTodo(todo, userId);
+        long userId = userDetails.getAuthUser().getUserId();
         ResponseDto responseDto1 = new ResponseDto();
         return ResponseUtil.response(todoServices.addTodo(todo,userId),responseDto1.getTotalRecords(), responseDto1.getError());
     }
 
 
-    @RequestMapping(value = "/update/{todoId}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/update/{todoId}", method = RequestMethod.PUT)
     public ResponseDto updateTodo(@RequestBody Todo todo, @PathVariable long todoId){
-
         ResponseDto responseDto1 = new ResponseDto();
         return ResponseUtil.response(todoServices.updateTodo(todo,todoId),responseDto1.getTotalRecords(),responseDto1.getError());
-
-
     }
 
 
@@ -82,9 +81,11 @@ public class TodoController {
 
 
     @RequestMapping(value = "/{todoId}",method = RequestMethod.DELETE)
-    public void deleteTodo(@PathVariable int todoId){
-//        long userId = userInfo.getAuthUser().getUserId();
-        this.todoServices.deleteTodo(todoId);
+    public ResponseEntity<String> deleteTodo(@PathVariable int todoId){
+
+
+        todoServices.deleteTodo(todoId);
+        return new ResponseEntity<String>("Todo deleted successfully!!!", HttpStatus.OK);
     }
 
 

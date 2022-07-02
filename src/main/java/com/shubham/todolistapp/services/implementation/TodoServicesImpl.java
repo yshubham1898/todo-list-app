@@ -5,17 +5,16 @@ import com.shubham.todolistapp.entity.Todo;
 import com.shubham.todolistapp.repository.TodoRepository;
 import com.shubham.todolistapp.repository.UserRepository;
 import com.shubham.todolistapp.services.interfaces.TodoServices;
-import com.shubham.todolistapp.services.interfaces.UserInfo;
+import com.shubham.todolistapp.services.interfaces.UserDetails;
 import com.shubham.todolistapp.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.util.Date;
 import java.util.Optional;
 
 
@@ -32,7 +31,7 @@ public class TodoServicesImpl implements TodoServices {
     ResponseUtil responseUtil;
 
     @Autowired
-    UserInfo userInfo;
+    UserDetails userDetails;
 
 
     //addTodo with user object
@@ -42,43 +41,43 @@ public class TodoServicesImpl implements TodoServices {
         if(user.isPresent()){
             todo.setDaoUser(user.get());
         }
-        Todo savedTodo = todoRepository.save(todo);
-        return savedTodo;
+        return todoRepository.save(todo);
     }
+
+
 
 
     @Override
     public Optional<Todo> getTodo(long todoId)  {
-        long userId = userInfo.getAuthUser().getUserId();
+        long userId = userDetails.getAuthUser().getUserId();
         Optional<DaoUser> user = userRepository.findById(userId);
         Optional<Todo> todo = todoRepository.findTodoOfUser(todoId,user);
 
         return todo;
     }
 
+
     @Override
     public Todo updateTodo(Todo todo, long todoId) {
 
-        long userId = userInfo.getAuthUser().getUserId();
+        long userId = userDetails.getAuthUser().getUserId();
         Optional<DaoUser> user = userRepository.findById(userId);
-//        Optional<Todo> todoToReplace = todoRepository.findTodoOfUser(todoId, user);
+        Optional<Todo> t = todoRepository.findTodoOfUser(todoId,user);
 
         if(user.isPresent()){
-            todo.setDaoUser(user.get());
             todo.setTitle(todo.getTitle());
             todo.setContent(todo.getContent());
             todo.setDueDate(todo.getDueDate());
         }
 
-        Todo updateTodo = todoRepository.save(todo);
-        return updateTodo;
+        return todoRepository.save(todo);
     }
 
 
     @Override
     public Page<Todo> getAllTodo(int offset, int pageSize) {
         Page<Todo> todos = null;
-        long userId = userInfo.getAuthUser().getUserId();
+        long userId = userDetails.getAuthUser().getUserId();
         Optional<DaoUser> user = userRepository.findById(userId);
 
         if(user.isPresent()){
@@ -89,24 +88,11 @@ public class TodoServicesImpl implements TodoServices {
     }
 
 
-//    @Override
-//    public List<Todo> getAllTodos() {
-//        List<Todo> todos = null;
-//        long userId = userInfo.getAuthUser().getUserId();
-//        Optional<DaoUser> user = userRepository.findById(userId);
-//        if(user.isPresent()){
-//            todos = user.get().getTodos();
-//        }
-//        return todos;
-//    }
-
-
-
-
 
     @Override
     public void deleteTodo(long todoId) {
         todoRepository.deleteById(todoId);
+
     }
 
 

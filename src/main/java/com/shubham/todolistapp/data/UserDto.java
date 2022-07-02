@@ -1,4 +1,4 @@
-package com.shubham.todolistapp.entity;
+package com.shubham.todolistapp.data;
 
 public class UserDto {
 

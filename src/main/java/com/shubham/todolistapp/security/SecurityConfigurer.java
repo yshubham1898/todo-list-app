@@ -18,40 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-
     @Autowired
     private UserDetailsServiceImpl myUserDetailsService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailsService);
-    }
-
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-        //this will bypass the spring security for "authenticate" & "register" api
-        http.csrf()
-                .disable()
-                .authorizeRequests()
-                .antMatchers("/authenticate","/register").permitAll()
-
-                //rest of requests will be authenticated
-                .anyRequest().authenticated()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        //this implies that jwtRequest filter will be called before the Username&password filter
-    }
-
-
-    //this will let the spring know about bean of authenticationManager
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception{
@@ -63,6 +35,35 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(myUserDetailsService);
+    }
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        //used for authorization
+        //this will bypass the spring security for "authenticate" & "register" api
+        http.csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/user/authenticate","/user/register","/v3/api-docs/**", "/swagger-ui/**").permitAll()
+
+                //rest of requests will be authenticated
+                .anyRequest().authenticated()
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        //this implies that jwtRequest filter will be called before the Username&password filter
+    }
+
+
 
 
 }

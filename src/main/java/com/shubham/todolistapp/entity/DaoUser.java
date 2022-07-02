@@ -15,17 +15,21 @@ public class DaoUser {
     @Column(name = "user_id")
     private long id;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "user_name", unique = true, nullable = false)
     private String username;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "daoUser", fetch = FetchType.LAZY)
     private List<Todo> todos;
+
 
     public DaoUser(long id, String firstName, String lastName, String username, String password, List<Todo> todos) {
         this.id = id;
